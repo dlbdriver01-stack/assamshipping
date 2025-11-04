@@ -1,0 +1,16 @@
+.env.local
+node_modules
+.next
+.vscode
+dist
+
+# Local Netlify folder
+.netlify
+
+# Secrets/keys
+serviceAccountKey.json
+shiptrak-in-firebase-ready/serviceAccountKey.json
+shiptrak-in-firebase-ready/all keys.txt
+config/.env.local
+config/.env
+*.env

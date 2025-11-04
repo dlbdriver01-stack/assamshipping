@@ -1,0 +1,16 @@
+[
+  {
+    "uid": "admin001",
+    "email": "admin@shiptrak.in",
+    "displayName": "Admin India",
+    "role": "admin",
+    "createdAt": "2025-10-20T08:00:00Z"
+  },
+  {
+    "uid": "operator001",
+    "email": "operator@shiptrak.in",
+    "displayName": "Field Operator Delhi",
+    "role": "operator",
+    "createdAt": "2025-10-20T08:00:00Z"
+  }
+]
