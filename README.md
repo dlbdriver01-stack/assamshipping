@@ -44,26 +44,36 @@ npm install
 Create a `.env.local` file in the root directory with the following variables:
 
 ```env
-# Firebase Configuration (Client)
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+# Firebase Configuration (Client) - set from your Firebase Console
+NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_PROJECT.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_PROJECT.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
+NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
 
-# Firebase Admin (Server-side only)
-# This should be a JSON string of your service account key
-FIREBASE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"..."}
+# Firebase Admin (Server-side) - paste the JSON content or Base64 of your service account
+# Prefer using Base64 to avoid escaping issues:
+# FIREBASE_SERVICE_ACCOUNT_KEY={"type":"service_account",...}
+# or
+# FIREBASE_SERVICE_ACCOUNT_KEY_BASE64=BASE64_ENCODED_JSON
 
 # Site Configuration
-NEXT_PUBLIC_SITE_URL=https://shiptrak.in
+NEXT_PUBLIC_SITE_URL=https://assampackersandmovers.com
 
 # Optional: Mapbox for route visualization
 NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_token_here
 ```
 
-### 3. Run Development Server
+### 3. Admin Login
+
+- **URL**: `http://localhost:3000/admin`
+- **Email**: `admin@assam.com`
+- **Password**: `admin@123##`
+
+Make sure the admin user exists in Firebase Authentication console.
+
+### 4. Run Development Server
 
 ```bash
 npm run dev
@@ -71,7 +81,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-### 4. Seed Firestore Data (Optional)
+### 5. Seed Firestore Data (Optional)
 
 ```bash
 node -r ts-node/register scripts/seed-firestore.ts
@@ -119,8 +129,8 @@ npm start
 
 ## 📚 Documentation
 
-- See `orchestration.txt` for detailed development workflow
-- Architecture and API specifications are in the `documentation/` folder
+- Architecture and API specifications are documented in the codebase
+- For deployment instructions, refer to your hosting provider's documentation
 
 ## 🌐 Deployment
 
@@ -138,4 +148,4 @@ MIT
 
 ## 🤝 Contributing
 
-This project follows the orchestration workflow defined in `orchestration.txt`. Please follow the phases and guidelines when contributing.
+Please follow standard Next.js and React best practices when contributing to this project.

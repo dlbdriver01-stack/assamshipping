@@ -1,13 +1,13 @@
-import { Package, MapPin, Calendar, Clock, User, Truck } from 'lucide-react'
+import { Package, MapPin, Calendar, Clock, User, Truck, FileText, Phone, Mail } from 'lucide-react'
 
 const statusConfig: Record<string, { label: string; color: string; bg: string }> = {
-  PICKED_UP: { label: 'Picked Up', color: 'text-blue-700', bg: 'bg-blue-100' },
-  IN_TRANSIT: { label: 'In Transit', color: 'text-yellow-700', bg: 'bg-yellow-100' },
-  OUT_FOR_DELIVERY: { label: 'Out for Delivery', color: 'text-purple-700', bg: 'bg-purple-100' },
-  DELIVERED: { label: 'Delivered', color: 'text-green-700', bg: 'bg-green-100' },
-  DELAYED: { label: 'Delayed', color: 'text-red-700', bg: 'bg-red-100' },
-  CUSTOMS_BLOCKAGE: { label: 'CUSTOMS BLOCKAGE', color: 'text-orange-700', bg: 'bg-orange-100' },
-  GOODS_RELEASED_BY_CUSTOMS: { label: 'GOODS RELEASED BY CUSTOMS', color: 'text-emerald-700', bg: 'bg-emerald-100' },
+  PICKED_UP: { label: 'Picked Up', color: 'text-blue-700', bg: 'bg-blue-50' },
+  IN_TRANSIT: { label: 'In Transit', color: 'text-slate-700', bg: 'bg-slate-50' },
+  OUT_FOR_DELIVERY: { label: 'Out for Delivery', color: 'text-slate-700', bg: 'bg-slate-50' },
+  DELIVERED: { label: 'Delivered', color: 'text-green-700', bg: 'bg-green-50' },
+  DELAYED: { label: 'Delayed', color: 'text-red-700', bg: 'bg-red-50' },
+  CUSTOMS_BLOCKAGE: { label: 'Customs Blockage', color: 'text-orange-700', bg: 'bg-orange-50' },
+  GOODS_RELEASED_BY_CUSTOMS: { label: 'Goods Released by Customs', color: 'text-emerald-700', bg: 'bg-emerald-50' },
 }
 
 export default function ShipmentDetailsCard({ shipment }: { shipment: any }) {
@@ -24,151 +24,180 @@ export default function ShipmentDetailsCard({ shipment }: { shipment: any }) {
     })
   }
   
-  const status = statusConfig[shipment.status] || { label: shipment.status, color: 'text-gray-700', bg: 'bg-gray-100' }
+  const status = statusConfig[shipment.status] || { label: shipment.status, color: 'text-slate-700', bg: 'bg-slate-50' }
   
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-primary/90 p-6 text-white">
-        <div className="flex items-center justify-between mb-2">
+    <div className="bg-white border border-slate-200">
+      {/* Professional Header */}
+      <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-              <Package className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold">Shipment Details</h2>
-              <p className="text-primary-100 text-sm">Tracking ID: <span className="font-mono font-semibold">{shipment.trackingId}</span></p>
-            </div>
+            <Package className="w-5 h-5 text-slate-600" />
+            <h2 className="text-lg font-semibold text-slate-900">Shipment Details</h2>
           </div>
-          <div className={`px-4 py-2 ${status.bg} ${status.color} rounded-lg font-semibold text-sm`}>
+          <div className={`px-3 py-1.5 ${status.bg} ${status.color} text-xs font-medium border border-slate-200`}>
             {status.label}
           </div>
         </div>
       </div>
       
       {/* Content */}
-      <div className="p-6 space-y-6">
-        {/* Addresses */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-slate-600 mb-3">
-              <Truck className="w-5 h-5 text-primary" />
-              <h3 className="font-semibold text-slate-900">Shipper</h3>
-            </div>
-            <div className="pl-7 space-y-1">
-              <p className="font-semibold text-slate-900">{shipment.shipper?.name}</p>
-              <p className="text-sm text-slate-600">{shipment.shipper?.address}</p>
-            </div>
+      <div className="p-6">
+        {/* Tracking ID */}
+        <div className="mb-6 pb-6 border-b border-slate-200">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-slate-600">Tracking Number</span>
+            <span className="font-mono text-sm font-medium text-slate-900">{shipment.trackingId}</span>
           </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-slate-600 mb-3">
-              <User className="w-5 h-5 text-accent" />
-              <h3 className="font-semibold text-slate-900">Receiver</h3>
+        </div>
+
+        {/* Addresses - Professional Table Style */}
+        <div className="mb-6 pb-6 border-b border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Addresses</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Truck className="w-4 h-4 text-slate-500" />
+                <span className="text-xs font-medium text-slate-600 uppercase tracking-wide">Shipper</span>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-slate-900">{shipment.shipper?.name}</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{shipment.shipper?.address}</p>
+                {shipment.shipper?.phone && (
+                  <p className="text-xs text-slate-600 flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{shipment.shipper.phone}</span>
+                  </p>
+                )}
+                {shipment.shipper?.email && (
+                  <p className="text-xs text-slate-600 flex items-center gap-1">
+                    <Mail className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{shipment.shipper.email}</span>
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="pl-7 space-y-1">
-              <p className="font-semibold text-slate-900">{shipment.receiver?.name}</p>
-              <p className="text-sm text-slate-600">{shipment.receiver?.address}</p>
+            
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <User className="w-4 h-4 text-slate-500" />
+                <span className="text-xs font-medium text-slate-600 uppercase tracking-wide">Receiver</span>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-slate-900">{shipment.receiver?.name}</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{shipment.receiver?.address}</p>
+                {shipment.receiver?.phone && (
+                  <p className="text-xs text-slate-600 flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{shipment.receiver.phone}</span>
+                  </p>
+                )}
+                {shipment.receiver?.email && (
+                  <p className="text-xs text-slate-600 flex items-center gap-1">
+                    <Mail className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{shipment.receiver.email}</span>
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
         
-        {/* Location */}
-        <div className="bg-slate-50 rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-primary" />
+        {/* Current Location */}
+        <div className="mb-6 pb-6 border-b border-slate-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-slate-500" />
+              <span className="text-sm font-medium text-slate-600">Current Location</span>
             </div>
-            <div className="flex-1">
-              <p className="text-sm text-slate-600">Current Location</p>
-              <p className="font-semibold text-slate-900">{shipment.currentLocation?.city || 'Unknown'}</p>
-            </div>
+            <span className="font-medium text-slate-900">{shipment.currentLocation?.city || 'Unknown'}</span>
           </div>
         </div>
         
-        {/* Optional shipment details */}
-        {(shipment.package || shipment.typeOfShipment || shipment.weight || shipment.product || shipment.totalFreight || shipment.quantity || shipment.comment) && (
-          <div className="bg-slate-50 rounded-xl p-4 space-y-2">
-            <div className="grid md:grid-cols-2 gap-4">
+        {/* Package Information - Table Style */}
+        {(shipment.package || shipment.typeOfShipment || shipment.weight || shipment.product || shipment.totalFreight || shipment.quantity) && (
+          <div className="mb-6 pb-6 border-b border-slate-200">
+            <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Package Information</h3>
+            <div className="space-y-3">
               {shipment.package && (
-                <div>
-                  <p className="text-sm text-slate-600">Package</p>
-                  <p className="font-semibold text-slate-900">{shipment.package}</p>
+                <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Package</span>
+                  <span className="text-sm font-medium text-slate-900">{shipment.package}</span>
                 </div>
               )}
               {shipment.typeOfShipment && (
-                <div>
-                  <p className="text-sm text-slate-600">Type of Shipment</p>
-                  <p className="font-semibold text-slate-900">{shipment.typeOfShipment}</p>
+                <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Type of Shipment</span>
+                  <span className="text-sm font-medium text-slate-900">{shipment.typeOfShipment}</span>
                 </div>
               )}
               {shipment.weight && (
-                <div>
-                  <p className="text-sm text-slate-600">Weight</p>
-                  <p className="font-semibold text-slate-900">{shipment.weight}</p>
+                <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Weight</span>
+                  <span className="text-sm font-medium text-slate-900">{shipment.weight}</span>
                 </div>
               )}
               {shipment.quantity && (
-                <div>
-                  <p className="text-sm text-slate-600">Quantity</p>
-                  <p className="font-semibold text-slate-900">{shipment.quantity}</p>
+                <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Quantity</span>
+                  <span className="text-sm font-medium text-slate-900">{shipment.quantity}</span>
                 </div>
               )}
               {shipment.totalFreight && (
-                <div>
-                  <p className="text-sm text-slate-600">Total Freight</p>
-                  <p className="font-semibold text-slate-900">{shipment.totalFreight}</p>
+                <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Total Freight</span>
+                  <span className="text-sm font-medium text-slate-900">{shipment.totalFreight}</span>
                 </div>
               )}
               {shipment.product && (
-                <div>
-                  <p className="text-sm text-slate-600">Product</p>
-                  <p className="font-semibold text-slate-900">{shipment.product}</p>
+                <div className="flex items-center justify-between py-2 border-b border-slate-100">
+                  <span className="text-sm text-slate-600">Product</span>
+                  <span className="text-sm font-medium text-slate-900">{shipment.product}</span>
                 </div>
               )}
             </div>
             {shipment.comment && (
-              <div>
-                <p className="text-sm text-slate-600">Comment</p>
-                <p className="text-slate-900">{shipment.comment}</p>
+              <div className="mt-4 pt-4 border-t border-slate-200">
+                <div className="flex items-start gap-2">
+                  <FileText className="w-4 h-4 text-slate-500 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-medium text-slate-600 uppercase tracking-wide block mb-1">Comment</span>
+                    <p className="text-sm text-slate-900">{shipment.comment}</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
         )}
 
-        {/* Timeline Dates */}
-        <div className="grid md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-600">Pickup Date</p>
-              <p className="font-semibold text-slate-900">{formatDate(shipment.pickupTime)}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Clock className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-600">Estimated Delivery</p>
-              <p className="font-semibold text-slate-900">{formatDate(shipment.estimatedDelivery)}</p>
-            </div>
-          </div>
-          
-          {shipment.deliveryTime && (
-            <div className="flex items-start gap-3 md:col-span-2">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Package className="w-5 h-5 text-green-700" />
+        {/* Important Dates */}
+        <div>
+          <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Important Dates</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between py-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-slate-500" />
+                <span className="text-sm text-slate-600">Pickup Date</span>
               </div>
-              <div>
-                <p className="text-sm text-slate-600">Delivered On</p>
-                <p className="font-semibold text-green-700">{formatDate(shipment.deliveryTime)}</p>
-              </div>
+              <span className="text-sm font-medium text-slate-900">{formatDate(shipment.pickupTime)}</span>
             </div>
-          )}
+            <div className="flex items-center justify-between py-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-slate-500" />
+                <span className="text-sm text-slate-600">Estimated Delivery</span>
+              </div>
+              <span className="text-sm font-medium text-slate-900">{formatDate(shipment.estimatedDelivery)}</span>
+            </div>
+            {shipment.deliveryTime && (
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-2">
+                  <Package className="w-4 h-4 text-green-600" />
+                  <span className="text-sm text-green-700 font-medium">Delivered On</span>
+                </div>
+                <span className="text-sm font-medium text-green-700">{formatDate(shipment.deliveryTime)}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

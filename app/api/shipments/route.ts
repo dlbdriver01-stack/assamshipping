@@ -84,7 +84,20 @@ export async function GET(request: Request) {
     }
 
     const raw = doc.data() as any
-    const toIso = (v: any) => (v && typeof v.toDate === 'function') ? v.toDate().toISOString() : v
+    const toIso = (v: any) =>
+      v && typeof v.toDate === 'function' ? v.toDate().toISOString() : v
+
+    // Normalize history entries so the form can consume them directly
+    const history = Array.isArray(raw.history)
+      ? raw.history.map((h: any) => ({
+          time: toIso(h.time),
+          status: h.status,
+          location: h.location,
+          updatedBy: h.updatedBy,
+          remarks: h.remarks,
+        }))
+      : []
+
     const payload = {
       ...raw,
       trackingId: raw?.trackingId || doc.id,
@@ -93,6 +106,7 @@ export async function GET(request: Request) {
       deliveryTime: toIso(raw?.deliveryTime),
       createdAt: toIso(raw?.createdAt),
       updatedAt: toIso(raw?.updatedAt),
+      history,
     }
     return Response.json(
       { ok: true, data: payload },

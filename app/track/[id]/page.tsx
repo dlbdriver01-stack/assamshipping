@@ -1,8 +1,10 @@
 import { adminDb } from '../../../lib/firebase-admin'
 import ShipmentDetailsCard from '../../../components/ShipmentDetailsCard'
 import ShipmentTimeline from '../../../components/ShipmentTimeline'
-import MapPreview from '../../../components/MapPreview'
+import PublicNav from '../../../components/PublicNav'
 import { Metadata } from 'next'
+import { Package, ArrowLeft, ChevronRight, Printer } from 'lucide-react'
+import Link from 'next/link'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
@@ -17,12 +19,9 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
   let data: any = null
   try {
     console.log('Fetching shipment:', id)
-    // First try to find by document ID (trackingId as doc ID)
     let doc = await adminDb.collection('shipments').doc(id).get()
     
-    // If not found by document ID, try querying by trackingId field
     if (!doc.exists) {
-      console.log('Not found by doc ID, querying by trackingId field...')
       const querySnapshot = await adminDb.collection('shipments')
         .where('trackingId', '==', id)
         .limit(1)
@@ -30,15 +29,11 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
       
       if (!querySnapshot.empty) {
         doc = querySnapshot.docs[0]
-        console.log('Found by trackingId field')
       }
     }
     
     if (doc.exists) {
       data = { ...doc.data(), id: doc.id }
-      console.log('Shipment data:', data)
-    } else {
-      console.log('Shipment not found with ID:', id)
     }
   } catch (e) {
     console.error('Error fetching shipment:', e)
@@ -47,59 +42,77 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
 
   if (!data) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12">
-        <div className="max-w-2xl mx-auto px-6">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-12 text-center">
-            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">❌</span>
+      <>
+        <PublicNav />
+        <main className="min-h-screen bg-white">
+          <div className="max-w-5xl mx-auto px-6 py-16">
+            <div className="border border-slate-200 bg-white">
+              <div className="border-b border-slate-200 bg-slate-50 px-8 py-6">
+                <h1 className="text-2xl font-semibold text-slate-900">Shipment Tracking</h1>
+              </div>
+              <div className="p-12 text-center">
+                <div className="w-16 h-16 border-2 border-slate-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Package className="w-8 h-8 text-slate-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-slate-900 mb-3">Shipment Not Found</h2>
+                <p className="text-slate-600 mb-2 text-sm">The tracking number</p>
+                <p className="font-mono font-medium text-slate-900 text-base mb-4 tracking-wider">{id}</p>
+                <p className="text-slate-500 text-sm mb-8">could not be found in our system.</p>
+                <Link 
+                  href="/" 
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Return to Home
+                </Link>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Shipment Not Found</h2>
-            <p className="text-lg text-slate-600 mb-6">
-              The tracking ID <span className="font-mono font-semibold text-primary">{id}</span> could not be found.
-            </p>
-            <p className="text-slate-500 mb-8">Please verify the tracking ID and try again.</p>
-            <a 
-              href="/" 
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all"
-            >
-              ← Back to Home
-            </a>
           </div>
-        </div>
-      </main>
+        </main>
+      </>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 py-8">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <a 
-              href="/" 
-              className="px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-slate-700 font-medium"
-            >
-              ← Back
-            </a>
+    <>
+      <PublicNav />
+      <main className="min-h-screen bg-slate-50">
+        {/* Professional Header */}
+        <div className="bg-white border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <div className="flex items-center gap-3 text-sm text-slate-600 mb-4">
+              <Link href="/" className="hover:text-slate-900">Home</Link>
+              <ChevronRight className="w-4 h-4" />
+              <span className="text-slate-900">Track Shipment</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-semibold text-slate-900 mb-1">Shipment Tracking</h1>
+                <p className="text-sm text-slate-600">Tracking Number: <span className="font-mono text-slate-900">{id}</span></p>
+              </div>
+              <div className="flex items-center gap-3">
+                <a
+                  href={`/api/shipments/${encodeURIComponent(id)}/pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Download PDF Receipt</span>
+                </a>
+              </div>
+            </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-2">
-            Tracking: <span className="text-primary font-mono">{id}</span>
-          </h1>
-          <p className="text-lg text-slate-600">Real-time shipment tracking with ASSAM PACKERS AND MOVERS</p>
         </div>
-        
-        {/* Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
+
+        {/* Main Content */}
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <div className="space-y-6">
             <ShipmentDetailsCard shipment={data} />
             <ShipmentTimeline history={data.history || []} />
           </div>
-          <div className="lg:col-span-1">
-            <MapPreview location={data.currentLocation} />
-          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }

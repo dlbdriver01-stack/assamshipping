@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   authors: [{ name: 'ASSAM PACKERS AND MOVERS' }],
   creator: 'ASSAM PACKERS AND MOVERS',
   publisher: 'ASSAM PACKERS AND MOVERS',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -47,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN" className="scroll-smooth">
       <head />
-      <body className="antialiased">
+      <body className="bg-white text-slate-800 antialiased">
         {children}
       </body>
     </html>

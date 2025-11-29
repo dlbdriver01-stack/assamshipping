@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useRef } from 'react'
-import { MapPin } from 'lucide-react'
 
 export default function MapClient({ lat, lng }: { lat: number; lng: number }) {
   const mapRef = useRef<HTMLDivElement>(null)
@@ -8,22 +7,18 @@ export default function MapClient({ lat, lng }: { lat: number; lng: number }) {
   useEffect(() => {
     if (!mapRef.current) return
 
-    // Enhanced map placeholder with gradient design
+    // Clean map placeholder
     const mapContainer = mapRef.current
     mapContainer.innerHTML = `
       <div style="
         width: 100%; 
         height: 320px; 
         background: linear-gradient(135deg, #0E7490 0%, #06B6D4 50%, #0E7490 100%);
-        border-radius: 12px; 
         display: flex; 
-        flex-direction: column;
         align-items: center; 
         justify-content: center; 
-        color: white; 
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       ">
         <div style="
           position: absolute;
@@ -38,36 +33,14 @@ export default function MapClient({ lat, lng }: { lat: number; lng: number }) {
           align-items: center;
           justify-content: center;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-          animation: pulse 2s infinite;
         ">
-          <span style="font-size: 24px;">📍</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#0E7490"/>
+          </svg>
         </div>
-        <div style="
-          position: absolute;
-          bottom: 16px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(8px);
-          padding: 8px 16px;
-          border-radius: 8px;
-          font-size: 12px;
-          font-weight: 500;
-          text-align: center;
-        ">
-          <div style="margin-bottom: 4px;">Map Preview</div>
-          <div style="font-size: 11px; opacity: 0.9;">${lat.toFixed(4)}, ${lng.toFixed(4)}</div>
-        </div>
-        <style>
-          @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-          }
-        </style>
       </div>
     `
   }, [lat, lng])
 
-  return <div ref={mapRef} className="rounded-xl overflow-hidden" />
+  return <div ref={mapRef} style={{ width: '100%' }} />
 }
-

@@ -1,11 +1,12 @@
 [build]
-  command = "next build"
-  publish = ".netlify/build"
+  command = "npm run build"
+  publish = ".next" # <- not .netlify/build
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
+  NEXT_USE_NETLIFY_EDGE = "true"
 
-# Next.js 16 requires specific configuration
 [functions]
   node_bundler = "esbuild"
 
@@ -15,7 +16,7 @@
 [context.production.environment]
   NEXT_PUBLIC_SITE_URL = "https://assampackersandmovers.com"
 
-# Headers for security and caching
+# --- Security Headers ---
 [[headers]]
   for = "/*"
   [headers.values]
@@ -23,8 +24,8 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# --- Caching for static assets ---
 [[headers]]
-  for = "/static/*"
+  for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-

@@ -4,6 +4,8 @@ export const ShipmentHistorySchema = z.object({
   time: z.string(),
   status: z.string(),
   location: z.string(),
+  updatedBy: z.string().optional(),
+  remarks: z.string().optional(),
 })
 
 export const ShipmentSchema = z.object({
@@ -11,10 +13,14 @@ export const ShipmentSchema = z.object({
   shipper: z.object({
     name: z.string().min(1, 'Shipper name is required'),
     address: z.string().min(1, 'Shipper address is required'),
+    phone: z.string().optional(),
+    email: z.string().email().optional().or(z.literal('')),
   }),
   receiver: z.object({
     name: z.string().min(1, 'Receiver name is required'),
     address: z.string().min(1, 'Receiver address is required'),
+    phone: z.string().optional(),
+    email: z.string().email().optional().or(z.literal('')),
   }),
   status: z.enum(['PICKED_UP', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED', 'DELAYED', 'CUSTOMS_BLOCKAGE', 'GOODS_RELEASED_BY_CUSTOMS']),
   pickupTime: z.string().optional(),

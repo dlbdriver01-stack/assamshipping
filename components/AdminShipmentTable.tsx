@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Printer } from 'lucide-react'
 
 const statusLabels: Record<string, string> = {
   PICKED_UP: 'Picked Up',
@@ -166,6 +167,15 @@ export default function AdminShipmentTable() {
                           Edit
                         </button>
                       </Link>
+                      <a 
+                        href={`/api/shipments/${shipment.trackingId}/pdf`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-all font-medium"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        PDF
+                      </a>
                     </div>
                   </td>
                 </tr>
